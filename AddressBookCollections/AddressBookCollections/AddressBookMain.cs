@@ -8,129 +8,113 @@ namespace AddressBookCollections
 {
     internal class AddressBookMain
     {
-        List<Contact> AddressList = new List<Contact>();
-        Dictionary<string, List<Contact>> MultipleAddressbook = new Dictionary<string, List<Contact>>();
-
-        public void Addontact(Contact newcontact)
+        //Collection Class
+        private List<Contacts> contactList;
+        //Constructor.
+        public AddressBookMain()
         {
-            AddressList.Add(newcontact);
-            MultipleAddressbook.Add(newcontact.firstname, AddressList);
+            this.contactList = new List<Contacts>();
         }
-        public void Editexistingcontact()
+        //Method to Add Contact
+        public void AddContactDetails(string firstName, string lastName, string address, string city, string state, long zipCode, long phoneNumber, string email)
         {
-            Console.WriteLine("Enter first name of person you want to edit");
-            string name = Console.ReadLine();
-            foreach (var contact in AddressList)
+
+            // finding the data that already has the same first name
+            Contacts contact = this.contactList.Find(x => x.firstName.Equals(firstName));
+            // if same name is not present then add into address book
+            if (contact == null)
             {
-                if (contact.firstname == name)
+                Contacts contactDetails = new Contacts(firstName, lastName, address, city, state, zipCode, phoneNumber, email);
+                this.contactList.Add(contactDetails);
+            }
+            // print person already exists in the address book
+            else
+            {
+                Console.WriteLine("Person, {0} is already exist in the address book", firstName);
+            }
+        }
+        //Display Contact
+        public void DisplayContact()
+        {
+            //cheks if ContactList is empty or not.
+            if (this.contactList.Count != 0)
+            {
+                foreach (Contacts data in this.contactList)
                 {
-                    Console.WriteLine("Enter number : \n 1. First name \n 2. Last name \n 3. Address \n 4. City \n 5. State \n 6. Zip code \n 7. Phone Number \n 8. Email");
+                    data.Display();
+                }
+            }
+            else
+                Console.WriteLine("No Contacts in AddressBook \n");
+        }
+        //Method to Edit Contact 
+        public void EditContact(string name)
+        {
+            // checks for every object whether the name is equal the given name
+            foreach (Contacts data in this.contactList)
+            {
+                if (data.firstName.Equals(name))
+                {
+                    Console.WriteLine("Enter your choice:");
+                    Console.WriteLine("1. Last Name");
+                    Console.WriteLine("2. Address");
+                    Console.WriteLine("3. City");
+                    Console.WriteLine("4. State");
+                    Console.WriteLine("5. Zip");
+                    Console.WriteLine("6. Phone Number");
+                    Console.WriteLine("7. Email");
                     int choice = Convert.ToInt32(Console.ReadLine());
+
                     switch (choice)
                     {
                         case 1:
-                            Console.WriteLine("Enter new firstname");
-                            string first = Console.ReadLine();
-                            contact.firstname = first;
+                            data.lastName = Console.ReadLine();
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 2:
-                            Console.WriteLine("Enter new lastname");
-                            string last = Console.ReadLine();
-                            contact.lastname = last;
+                            data.address = Console.ReadLine();
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 3:
-                            Console.WriteLine("Enter new address");
-                            string address = Console.ReadLine();
-                            contact.address = address;
+                            data.city = Console.ReadLine();
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 4:
-                            Console.WriteLine("Enter new city");
-                            string city = Console.ReadLine();
-                            contact.city = city;
+                            data.state = Console.ReadLine();
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 5:
-                            Console.WriteLine("Enter new state");
-                            string state = Console.ReadLine();
-                            contact.state = state;
+                            data.zipCode = Convert.ToInt64(Console.ReadLine());
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 6:
-                            Console.WriteLine("Enter new zip");
-                            string zip = Console.ReadLine();
-                            contact.zip = zip;
+                            data.phoneNumber = Convert.ToInt64(Console.ReadLine());
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         case 7:
-                            Console.WriteLine("Enter new phonenumber");
-                            string phone = Console.ReadLine();
-                            contact.phonenumber = phone;
-                            break;
-                        case 8:
-                            Console.WriteLine("Enter new emailid");
-                            string email = Console.ReadLine();
-                            contact.emailid = email;
+                            data.email = Console.ReadLine();
+                            Console.WriteLine("Data updated successfully \n");
                             break;
                         default:
+                            Console.WriteLine("Enter Valid Choice! \n");
                             break;
                     }
                 }
+                else
+                    Console.WriteLine("No Contact With this Name! \n");
             }
         }
-        public void Deletecontact()
+        //Method to Delete a Person
+        public void DeleteContact(string dName)
         {
-            Console.WriteLine("Enter first name you want delete");
-            string name = Console.ReadLine();
-            Contact delete = new Contact();
-            foreach (var contact in AddressList)
+            foreach (Contacts ct in this.contactList)
             {
-                if (contact.firstname == name)
+                if (ct.firstName.Equals(dName))
                 {
-                    AddressList.Remove(contact);
-                    Console.WriteLine(name + " contact is deleted");
+                    this.contactList.Remove(ct);
+                    Console.WriteLine("Contact Deleted! \n");
                     break;
                 }
-            }
-        }
-        public void Display()
-        {
-            foreach (var contact in AddressList)
-            {
-                Console.WriteLine("\nfirstname: " + contact.firstname + "\nlastname: " + contact.lastname + "\naddress: " + contact.address + "\ncity: " + contact.city + "\nstate: " + contact.state + "\nzip: " + contact.zip + "\nphoneno: " + contact.phonenumber + "\nemail: " + contact.emailid);
-            }
-        }
-        public void AddUniqueContact(string uniquename)
-        {
-            foreach (var contact in AddressList)
-            {
-                if (contact.firstname.Equals(uniquename))
-                {
-                    Contact multiplecontact = new Contact();
-
-                    Console.WriteLine("Contact already exist , Enter unique name");
-                    multiplecontact.firstname = Console.ReadLine();
-                    multiplecontact.lastname = Console.ReadLine();
-                    multiplecontact.address = Console.ReadLine();
-                    multiplecontact.city = Console.ReadLine();
-                    multiplecontact.state = Console.ReadLine();
-                    multiplecontact.zip = Console.ReadLine();
-                    multiplecontact.phonenumber = Console.ReadLine();
-                    multiplecontact.emailid = Console.ReadLine();
-                    Addontact(multiplecontact);
-                }
-            }
-        }
-        public void DisplayUniqueContacts()
-        {
-            Console.WriteLine("Enter firstname to display that contact details");
-            string name = Console.ReadLine().ToLower();
-            foreach (var contacts in MultipleAddressbook)
-            {
-                if (contacts.Key == name)
-                {
-                    foreach (var data in contacts.Value)
-                    {
-                        Console.WriteLine("The Contact details of " + data.firstname + "are : \n" + data.firstname + " " + data.lastname + " " + data.address + " " + data.city + " " + data.state + " " + data.zip + " " + data.phonenumber + " " + data.emailid);
-                    }
-                }
-
             }
         }
     }
