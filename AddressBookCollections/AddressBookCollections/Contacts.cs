@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace AddressBookCollections
 {
-    internal class Contacts
+    public  class Contacts
     {
-
-
         // variables
         public string firstName;
         public string lastName;
@@ -47,4 +45,3 @@ namespace AddressBookCollections
         }
     }
 }
-
